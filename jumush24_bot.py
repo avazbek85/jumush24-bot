@@ -6,7 +6,7 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
-        [InlineKeyboardButton("💼 Жумуш издөө", callback_data='find_job')],
+        [InlineKeyboardButton("💼 Жумушчу керек", callback_data='find_job')],
         [InlineKeyboardButton("📢 Жумуш берүү", callback_data='post_job')],
         [InlineKeyboardButton("📞 Байланыш", callback_data='contact')]
     ]
