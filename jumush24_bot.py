@@ -3,7 +3,7 @@ import os
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, ConversationHandler, ContextTypes, filters
 
-BOT_TOKEN = os.environ.get("BOT_TOKEN", "TOKEN_JERGE_JAZ")
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
 CHOOSE_ACTION, GET_VILLAGE, GET_NAME, GET_SERVICE, GET_PHONE, SEARCH_VILLAGE = range(6)
 DB_FILE = "database.json"
 
@@ -41,6 +41,7 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await query.message.reply_text(text)
     else:
         await query.message.reply_text("✅ Төлөм кабыл алынды! Сиз базага кошулдуңуз.")
+        await query.message.reply_text("Башкы меню:", reply_markup=ReplyKeyboardMarkup([["📦 Иш табуу", "🧑‍🔧 Жумушчу болом"]], resize_keyboard=True))
         return ConversationHandler.END
 
 async def choose_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -53,4 +54,13 @@ async def choose_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return GET_NAME
 
 async def get_village_search(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    village = update.message
+    village = update.message.text
+    context.user_data['search_village'] = village
+    db = load_db()
+    workers = db.get(village, [])
+    kb = InlineKeyboardMarkup([[InlineKeyboardButton(f"💳 Көрүү - {len(workers)} жумушчу", callback_data="check_pay_search")]])
+    await update.message.reply_text(f"{village} айылында {len(workers)} жумушчу бар. Көрүү үчүн басыңыз:", reply_markup=kb)
+    return CHOOSE_ACTION
+
+async def get_name(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    context.user_data
