@@ -93,7 +93,7 @@ async def get_service(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(f"✅ {village} базасына кошулдуңуз!", reply_markup=kb)
     return CHOOSE_ACTION
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     threading.Thread(target=run_web, daemon=True).start()
     app = Application.builder().token(BOT_TOKEN).build()
     conv = ConversationHandler(entry_points=[CommandHandler("start", start)], states={CHOOSE_ACTION: [MessageHandler(filters.TEXT & ~filters.COMMAND, choose_action), CallbackQueryHandler(button)], GET_NAME: [MessageHandler(filters.TEXT & ~filters.COMMAND, get_name)], GET_VILLAGE: [MessageHandler(filters.TEXT & ~filters.COMMAND, get_village)], GET_SERVICE: [MessageHandler(filters.TEXT & ~filters.COMMAND, get_service)], SEARCH_VILLAGE: [MessageHandler(filters.TEXT & ~filters.COMMAND, get_village_search)]}, fallbacks=[CommandHandler("start", start)])
