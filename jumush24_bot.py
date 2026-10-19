@@ -60,16 +60,16 @@ async def get_phone(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Кызматыңыз жана акысы? (Мисалы: Сантехник - 1000с)")
     return GET_SERVICE
     async def get_service(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    context.user_data['service']=update.message.text
-    village=context.user_data['village']
-    db=load_db()
-    if village not in db: db[village]=[]
-    db[village].append({"name":context.user_data['name'],"phone":context.user_data['phone'],"service":context.user_data['service'],"paid":True})
-    save_db(db)
-    xpay_link=create_xpay_payment(20,update.effective_user.id,"registration") or "https://xpay.kg"
-    kb=InlineKeyboardMarkup([[InlineKeyboardButton("💳 20 сом төлөө - XPay", url=xpay_link)],[InlineKeyboardButton("✅ Төлөдүм", callback_data="check_pay_reg")]])
-    await update.message.reply_text(f"Айыл: {village}\nБазага кириш үчүн 20 сом төлөңүз:", reply_markup=kb)
-    return PAYMENT
+        context.user_data['service']=update.message.text
+        village=context.user_data['village']
+        db=load_db()
+        if village not in db: db[village]=[]
+        db[village].append({"name":context.user_data['name'],"phone":context.user_data['phone'],"service":context.user_data['service'],"paid":True})
+        save_db(db)
+        xpay_link=create_xpay_payment(20,update.effective_user.id,"registration") or "https://xpay.kg"
+        kb=InlineKeyboardMarkup([[InlineKeyboardButton("💳 20 сом төлөө - XPay", url=xpay_link)],[InlineKeyboardButton("✅ Төлөдүм", callback_data="check_pay_reg")]])
+        await update.message.reply_text(f"Айыл: {village}\nБазага кириш үчүн 20 сом төлөңүз:", reply_markup=kb)
+        return PAYMENT
 
 async def get_village_search(update: Update, context: ContextTypes.DEFAULT_TYPE):
     village=update.message.text
